@@ -1,0 +1,22 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access for schools to anyone
+    match /schools/{schoolId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+      
+      // Teachers collection
+      match /teachers/{teacherId} {
+        allow read: if true; // Allow reading teachers data for login
+        allow write: if request.auth != null && request.auth.uid == schoolId;
+      }
+
+      // Students collection
+      match /students/{studentId} {
+        allow read: if true; // Allow reading students data for login
+        allow write: if request.auth != null && request.auth.uid == schoolId;
+      }
+    }
+  }
+} 
