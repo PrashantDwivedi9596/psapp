@@ -14,10 +14,10 @@ export default function SchoolCode() {
       setError('Please enter a school code');
       return;
     }
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
       const schoolsRef = collection(db, 'schools');
       const q = query(schoolsRef, where('code', '==', schoolCode));
@@ -33,8 +33,8 @@ export default function SchoolCode() {
         setError('Invalid school code');
       }
     } catch (err) {
-      setError('Error verifying school code');
-      console.error(err);
+      setError('Error verifying school code: ' + (err instanceof Error ? err.message : String(err)));
+      console.error('Firebase error:', err);
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ export default function SchoolCode() {
       <View style={styles.contentContainer}>
         <Text style={styles.title}>Welcome</Text>
         <Text style={styles.subtitle}>Enter your school code to continue</Text>
-        
+
         <TextInput
           style={styles.input}
           placeholder="Enter school code"
@@ -54,11 +54,11 @@ export default function SchoolCode() {
           onChangeText={setSchoolCode}
           autoCapitalize="none"
         />
-        
+
         {error ? <Text style={styles.error}>{error}</Text> : null}
-        
-        <TouchableOpacity 
-          style={styles.button} 
+
+        <TouchableOpacity
+          style={styles.button}
           onPress={verifySchoolCode}
           disabled={loading}
         >
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF9800',
     padding: 15,
     borderRadius: 8,
     width: '100%',
